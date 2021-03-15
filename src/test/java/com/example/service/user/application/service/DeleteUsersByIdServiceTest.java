@@ -46,7 +46,7 @@ class DeleteUsersByIdServiceTest {
 
         Mockito.when(readUserPort.existsUserById(userId)).thenReturn(UnitReactive.of(Mono.just(false)));
         UnitReactive<Void> voidUnitReactive = deleteUsersByIdService.deleteById(userId);
-        assertThatThrownBy(() -> voidUnitReactive.mono().blockOptional())
+        assertThatThrownBy(() -> voidUnitReactive.toMono().blockOptional())
             .isInstanceOf(IllegalArgumentException.class);
 
         Mockito.verify(writeUserPort, Mockito.never()).deleteById(Mockito.any());
@@ -61,7 +61,7 @@ class DeleteUsersByIdServiceTest {
         Mockito.when(writeUserPort.deleteById(userId)).thenReturn(UnitReactive.of(Mono.empty()));
 
         UnitReactive<Void> voidUnitReactive = deleteUsersByIdService.deleteById(userId);
-        voidUnitReactive.mono().block();
+        voidUnitReactive.toMono().block();
 
         Mockito.verify(writeUserPort, Mockito.times(1)).deleteById(Mockito.any());
         Mockito.verify(readUserPort, Mockito.times(1)).existsUserById(Mockito.any());

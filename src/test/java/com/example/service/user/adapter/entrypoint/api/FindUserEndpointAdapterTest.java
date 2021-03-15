@@ -50,7 +50,7 @@ class FindUserEndpointAdapterTest {
         Mockito.when(userDtoMapper.toDto(user)).thenReturn(userDto);
 
         UnitReactive<UserDto> userDtoUnitReactive = findUserEndpointAdapter.fetchUserById(userIdInt);
-        assertThat(userDtoUnitReactive.mono().block()).isEqualTo(userDto);
+        assertThat(userDtoUnitReactive.toMono().block()).isEqualTo(userDto);
     }
 
     @Test
@@ -60,7 +60,7 @@ class FindUserEndpointAdapterTest {
         Mockito.when(findAllUsersUseCase.fetchAllPersisted()).thenReturn(userCollectionReactive);
 
         CollectionReactive<UserDto> userDtoCollectionReactive = findUserEndpointAdapter.fetchAllUsers();
-        List<UserDto> userDtos = userDtoCollectionReactive.flux().collectList().block();
+        List<UserDto> userDtos = userDtoCollectionReactive.toFlux().collectList().block();
         assertThat(userDtos).isEmpty();
     }
 
@@ -78,7 +78,7 @@ class FindUserEndpointAdapterTest {
         Mockito.when(userDtoMapper.toDto(user2)).thenReturn(userDto2);
 
         CollectionReactive<UserDto> userDtoCollectionReactive = findUserEndpointAdapter.fetchAllUsers();
-        List<UserDto> userDtos = userDtoCollectionReactive.flux().collectList().block();
+        List<UserDto> userDtos = userDtoCollectionReactive.toFlux().collectList().block();
         assertThat(userDtos).hasSize(2).containsExactlyInAnyOrder(userDto1, userDto2);
     }
 

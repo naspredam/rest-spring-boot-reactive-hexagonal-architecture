@@ -54,7 +54,7 @@ class ChangeUserEndpointAdapterTest {
         Mockito.when(userDtoMapper.toDto(userCreated)).thenReturn(userDtoConvertedFromSaveUser);
 
         UnitReactive<UserDto> userDtoUnitReactive = changeUserEndpointAdapter.saveUser(saveUserBodyDto);
-        assertThat(userDtoUnitReactive.mono().block()).isEqualTo(userDtoConvertedFromSaveUser);
+        assertThat(userDtoUnitReactive.toMono().block()).isEqualTo(userDtoConvertedFromSaveUser);
     }
 
     @Test
@@ -71,7 +71,7 @@ class ChangeUserEndpointAdapterTest {
         Mockito.when(userDtoMapper.toDto(userCreated)).thenReturn(userDtoConvertedFromSaveUser);
 
         UnitReactive<UserDto> userDtoUnitReactive = changeUserEndpointAdapter.updateUser(userId, saveUserBodyDto);
-        assertThat(userDtoUnitReactive.mono().block()).isEqualTo(userDtoConvertedFromSaveUser);
+        assertThat(userDtoUnitReactive.toMono().block()).isEqualTo(userDtoConvertedFromSaveUser);
     }
 
     @Test
@@ -81,7 +81,7 @@ class ChangeUserEndpointAdapterTest {
         Mockito.when(deleteUsersByIdUseCase.deleteById(userId)).thenReturn(UnitReactive.of(Mono.empty()));
 
         UnitReactive<Void> voidUnitReactive = changeUserEndpointAdapter.deleteUser(userId.intValue());
-        voidUnitReactive.mono().block();
+        voidUnitReactive.toMono().block();
 
         Mockito.verify(deleteUsersByIdUseCase).deleteById(userId);
     }

@@ -43,7 +43,7 @@ class ChangeExistingUserServiceTest {
         Mockito.when(writeUserPort.update(user)).thenReturn(UnitReactive.of(Mono.empty()));
 
         UnitReactive<User> userUnitReactive = changeExistingUserService.updateUser(user);
-        assertThat(userUnitReactive.mono().blockOptional()).isEmpty();
+        assertThat(userUnitReactive.toMono().blockOptional()).isEmpty();
         Mockito.verify(writeUserPort, Mockito.times(1)).update(Mockito.any());
     }
 
@@ -55,7 +55,7 @@ class ChangeExistingUserServiceTest {
         Mockito.when(writeUserPort.update(user)).thenReturn(UnitReactive.of(Mono.just(userFromPort)));
 
         UnitReactive<User> userUnitReactive = changeExistingUserService.updateUser(user);
-        assertThat(userUnitReactive.mono().block()).isEqualTo(userFromPort);
+        assertThat(userUnitReactive.toMono().block()).isEqualTo(userFromPort);
     }
 
 }

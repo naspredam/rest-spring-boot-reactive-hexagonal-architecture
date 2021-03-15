@@ -13,11 +13,11 @@ public class CollectionReactive<T> {
 
     Flux<T> flux;
 
-    public Flux<T> flux() {
+    public Flux<T> toFlux() {
         return flux;
     }
 
-    public <R> CollectionReactive<R> map(Function<? super T, ? extends R> mapper) {
+    public <U> CollectionReactive<U> map(Function<? super T, ? extends U> mapper) {
         return CollectionReactive.of(flux.map(mapper));
     }
 }

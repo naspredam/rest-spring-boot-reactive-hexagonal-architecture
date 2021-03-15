@@ -34,32 +34,32 @@ class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserDto> saveUser(@RequestBody @Valid SaveUserBodyDto saveUserBodyDto) {
-        return changeUserEndpointAdapter.saveUser(saveUserBodyDto).mono();
+        return changeUserEndpointAdapter.saveUser(saveUserBodyDto).toMono();
     }
 
     @PutMapping("/{user_id}")
     @ResponseStatus(HttpStatus.OK)
     public Mono<UserDto> updateUser(@PathVariable("user_id") int userId,
                               @RequestBody @Valid SaveUserBodyDto saveUserBodyDto) {
-        return changeUserEndpointAdapter.updateUser(userId, saveUserBodyDto).mono();
+        return changeUserEndpointAdapter.updateUser(userId, saveUserBodyDto).toMono();
     }
 
     @GetMapping("/{user_id}")
     @ResponseStatus(HttpStatus.OK)
     public Mono<UserDto> fetchUserById(@PathVariable("user_id") Integer userId) {
-        return findUserEndpointAdapter.fetchUserById(userId).mono();
+        return findUserEndpointAdapter.fetchUserById(userId).toMono();
     }
 
     @DeleteMapping("/{user_id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> deleteUserById(@PathVariable("user_id") Integer userId) {
-        return changeUserEndpointAdapter.deleteUser(userId).mono();
+        return changeUserEndpointAdapter.deleteUser(userId).toMono();
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Flux<UserDto> fetchAllUsers() {
-        return findUserEndpointAdapter.fetchAllUsers().flux();
+        return findUserEndpointAdapter.fetchAllUsers().toFlux();
     }
 
 }

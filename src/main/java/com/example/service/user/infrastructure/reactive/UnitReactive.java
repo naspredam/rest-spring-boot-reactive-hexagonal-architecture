@@ -13,20 +13,20 @@ public class UnitReactive<T> {
 
     Mono<T> mono;
 
-    public Mono<T> mono() {
+    public Mono<T> toMono() {
         return mono;
     }
 
-    public <R> UnitReactive<R> map(Function<? super T, ? extends R> mapper) {
+    public <U> UnitReactive<U> map(Function<? super T, ? extends U> mapper) {
         return UnitReactive.of(mono.map(mapper));
     }
 
-    public <R> UnitReactive<R> flatMap(Function<? super T, ? extends UnitReactive<? extends R>> transformer) {
-        Function<? super T, ? extends Mono<? extends R>> monoFunction = transformer.andThen(UnitReactive::mono);
+    public <U> UnitReactive<U> flatMap(Function<? super T, ? extends UnitReactive<? extends U>> transformer) {
+        Function<? super T, ? extends Mono<? extends U>> monoFunction = transformer.andThen(UnitReactive::toMono);
         return UnitReactive.of(mono.flatMap(monoFunction));
     }
 
-    public static <T> UnitReactive<T> error(Throwable t) {
+    public static <U> UnitReactive<U> error(Throwable t) {
         return UnitReactive.of(Mono.error(t));
     }
 

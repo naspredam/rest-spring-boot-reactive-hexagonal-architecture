@@ -44,7 +44,7 @@ class WriteUserAdapterTest {
         Mockito.when(userJpaMapper.toDomain(persistedUserData)).thenReturn(persistedUser);
 
         UnitReactive<User> userUnitReactive = writeUserAdapter.saveNew(newUser);
-        assertThat(userUnitReactive.mono().block()).isEqualTo(persistedUser);
+        assertThat(userUnitReactive.toMono().block()).isEqualTo(persistedUser);
     }
 
     @Test
@@ -55,7 +55,7 @@ class WriteUserAdapterTest {
                 .thenReturn(Mono.empty());
 
         UnitReactive<User> update = writeUserAdapter.update(userToUpdate);
-        assertThat(update.mono().blockOptional()).isEmpty();
+        assertThat(update.toMono().blockOptional()).isEmpty();
 
         Mockito.verify(userRepository, Mockito.never()).save(Mockito.any());
     }
@@ -79,7 +79,7 @@ class WriteUserAdapterTest {
 
 
         UnitReactive<User> update = writeUserAdapter.update(userToUpdate);
-        assertThat(update.mono().blockOptional()).isPresent().contains(updatedUser);
+        assertThat(update.toMono().blockOptional()).isPresent().contains(updatedUser);
     }
 
     @Test
@@ -89,7 +89,7 @@ class WriteUserAdapterTest {
         Mockito.when(userRepository.deleteById(userId.intValue())).thenReturn(Mono.empty());
 
         UnitReactive<Void> voidUnitReactive = writeUserAdapter.deleteById(userId);
-        voidUnitReactive.mono().block();
+        voidUnitReactive.toMono().block();
 
         Mockito.verify(userRepository).deleteById(userId.intValue());
     }

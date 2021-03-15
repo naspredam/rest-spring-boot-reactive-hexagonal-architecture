@@ -48,7 +48,7 @@ class FindUserServiceTest {
         Mockito.when(readUserPort.fetchById(userId)).thenReturn(UnitReactive.of(Mono.empty()));
 
         UnitReactive<User> byId = findUserService.findById(userId);
-        assertThat(byId.mono().blockOptional()).isEmpty();
+        assertThat(byId.toMono().blockOptional()).isEmpty();
         Mockito.verify(readUserPort, Mockito.times(1)).fetchById(Mockito.any());
     }
 
@@ -60,7 +60,7 @@ class FindUserServiceTest {
         Mockito.when(readUserPort.fetchById(userId)).thenReturn(UnitReactive.of(Mono.just(userFromPort)));
 
         UnitReactive<User> byId = findUserService.findById(userId);
-        assertThat(byId.mono().block()).isEqualTo(userFromPort);
+        assertThat(byId.toMono().block()).isEqualTo(userFromPort);
         Mockito.verify(readUserPort, Mockito.times(1)).fetchById(Mockito.any());
     }
 
@@ -69,7 +69,7 @@ class FindUserServiceTest {
         Mockito.when(readUserPort.fetchAll()).thenReturn(CollectionReactive.of(Flux.empty()));
 
         CollectionReactive<User> userCollectionReactive = findUserService.fetchAllPersisted();
-        Collection<User> users = userCollectionReactive.flux().collectList().block();
+        Collection<User> users = userCollectionReactive.toFlux().collectList().block();
         assertThat(users).isEmpty();
     }
 
@@ -82,7 +82,7 @@ class FindUserServiceTest {
         Mockito.when(readUserPort.fetchAll()).thenReturn(userList);
 
         CollectionReactive<User> userCollectionReactive = findUserService.fetchAllPersisted();
-        Collection<User> users = userCollectionReactive.flux().collectList().block();
+        Collection<User> users = userCollectionReactive.toFlux().collectList().block();
         assertThat(users).hasSize(2).containsExactlyInAnyOrder(user1, user2);
     }
 

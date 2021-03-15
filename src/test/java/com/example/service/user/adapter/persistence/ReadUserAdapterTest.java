@@ -48,7 +48,7 @@ class ReadUserAdapterTest {
                 .thenReturn(Flux.just(UserData.builder().build()));
 
         UnitReactive<Boolean> userFoundUnitReactive = readUserAdapter.existsUserByName(user);
-        assertThat(userFoundUnitReactive.mono().block()).isTrue();
+        assertThat(userFoundUnitReactive.toMono().block()).isTrue();
     }
 
     @Test
@@ -61,7 +61,7 @@ class ReadUserAdapterTest {
                 .thenReturn(Flux.empty());
 
         UnitReactive<Boolean> userFoundUnitReactive = readUserAdapter.existsUserByName(user);
-        assertThat(userFoundUnitReactive.mono().block()).isFalse();
+        assertThat(userFoundUnitReactive.toMono().block()).isFalse();
     }
 
     @Test
@@ -73,7 +73,7 @@ class ReadUserAdapterTest {
                 .thenReturn(Mono.just(true));
 
         UnitReactive<Boolean> userFoundUnitReactive = readUserAdapter.existsUserById(UserId.of(userId));
-        assertThat(userFoundUnitReactive.mono().block()).isTrue();
+        assertThat(userFoundUnitReactive.toMono().block()).isTrue();
     }
 
     @Test
@@ -85,7 +85,7 @@ class ReadUserAdapterTest {
                 .thenReturn(Mono.just(false));
 
         UnitReactive<Boolean> userFoundUnitReactive = readUserAdapter.existsUserById(UserId.of(userId));
-        assertThat(userFoundUnitReactive.mono().block()).isFalse();
+        assertThat(userFoundUnitReactive.toMono().block()).isFalse();
     }
 
     @Test
@@ -96,7 +96,7 @@ class ReadUserAdapterTest {
                 .thenReturn(Mono.empty());
 
         UnitReactive<User> userOptional = readUserAdapter.fetchById(userId);
-        assertThat(userOptional.mono().blockOptional()).isEmpty();
+        assertThat(userOptional.toMono().blockOptional()).isEmpty();
     }
 
     @Test
@@ -110,7 +110,7 @@ class ReadUserAdapterTest {
         Mockito.when(userJpaMapper.toDomain(foundUserData)).thenReturn(user);
 
         UnitReactive<User> userUnitReactive = readUserAdapter.fetchById(userId);
-        assertThat(userUnitReactive.mono().blockOptional()).isPresent().contains(user);
+        assertThat(userUnitReactive.toMono().blockOptional()).isPresent().contains(user);
     }
 
     @Test
@@ -118,7 +118,7 @@ class ReadUserAdapterTest {
         Mockito.when(userRepository.findAll()).thenReturn(Flux.empty());
 
         CollectionReactive<User> userCollectionReactive = readUserAdapter.fetchAll();
-        assertThat(userCollectionReactive.flux().collectList().block()).isEmpty();
+        assertThat(userCollectionReactive.toFlux().collectList().block()).isEmpty();
     }
 
     @Test
@@ -135,7 +135,7 @@ class ReadUserAdapterTest {
         Mockito.when(userJpaMapper.toDomain(userData2)).thenReturn(user2);
 
         CollectionReactive<User> userCollectionReactive = readUserAdapter.fetchAll();
-        Collection<User> users = userCollectionReactive.flux().collectList().block();
+        Collection<User> users = userCollectionReactive.toFlux().collectList().block();
         assertThat(users).hasSize(2).containsExactlyInAnyOrder(user1, user2);
     }
 }

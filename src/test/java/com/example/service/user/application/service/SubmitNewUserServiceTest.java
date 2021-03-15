@@ -48,7 +48,7 @@ class SubmitNewUserServiceTest {
         Mockito.when(readUserPort.existsUserByName(user)).thenReturn(UnitReactive.of(Mono.just(true)));
 
         UnitReactive<User> userUnitReactive = submitNewUserService.saveUser(user);
-        assertThatThrownBy(() -> userUnitReactive.mono().blockOptional())
+        assertThatThrownBy(() -> userUnitReactive.toMono().blockOptional())
                 .isInstanceOf(IllegalArgumentException.class);
 
         Mockito.verify(writeUserPort, Mockito.never()).saveNew(Mockito.any());
@@ -64,7 +64,7 @@ class SubmitNewUserServiceTest {
         Mockito.when(writeUserPort.saveNew(user)).thenReturn(UnitReactive.of(Mono.just(savedUser)));
 
         UnitReactive<User> userUnitReactive = submitNewUserService.saveUser(user);
-        assertThat(userUnitReactive.mono().blockOptional()).isPresent().contains(savedUser);
+        assertThat(userUnitReactive.toMono().blockOptional()).isPresent().contains(savedUser);
 
         Mockito.verify(writeUserPort, Mockito.times(1)).saveNew(Mockito.any());
         Mockito.verify(readUserPort, Mockito.times(1)).existsUserByName(Mockito.any());
